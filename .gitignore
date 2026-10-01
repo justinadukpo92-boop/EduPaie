@@ -1,0 +1,33 @@
+# Environnement virtuel
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Base de données locale (journaux SQLite)
+db/*.db-journal
+db/*.db-wal
+db/*.db-shm
+
+# Build PyInstaller
+build/
+dist/
+*.spec
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reçus générés (à exclure du dépôt)
+recus/
+*.pdf
