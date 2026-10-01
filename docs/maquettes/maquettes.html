@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>EduPaie — Maquettes</title>
+<style>
+  /* ============ STYLES GÉNÉRAUX ============ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1f2937;
+    padding: 30px;
+    line-height: 1.4;
+  }
+  h1.page-title {
+    text-align: center;
+    font-size: 26px;
+    color: #1e3a8a;
+    margin-bottom: 8px;
+  }
+  p.page-sub {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+  h2.screen-title {
+    font-size: 18px;
+    color: #1e3a8a;
+    margin: 40px 0 12px;
+    padding-left: 8px;
+    border-left: 4px solid #2563eb;
+  }
+  .mockup {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ============ BARRE DE TITRE FENÊTRE ============ */
+  .window-bar {
+    background: #1e3a8a;
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .window-bar .controls { letter-spacing: 6px; opacity: .8; }
+
+  /* ============ LAYOUT PRINCIPAL ============ */
+  .layout { display: flex; min-height: 420px; }
+  .sidebar {
+    background: #1e293b;
+    color: #cbd5e1;
+    width: 190px;
+    padding: 20px 0;
+    flex-shrink: 0;
+  }
+  .sidebar .item {
+    padding: 12px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+  }
+  .sidebar .item.active {
+    background: #334155;
+    color: #fff;
+    border-left-color: #3b82f6;
+  }
+  .content { flex: 1; padding: 20px 24px; background: #f9fafb; }
+
+  /* ============ HEADER CONTENU ============ */
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .content-header h3 { font-size: 18px; color: #111827; }
+
+  /* ============ BOUTONS ============ */
+  .btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .btn-primary { background: #2563eb; color: #fff; }
+  .btn-secondary { background: #e5e7eb; color: #374151; }
+  .btn-danger { background: #dc2626; color: #fff; }
+  .btn-success { background: #059669; color: #fff; }
+
+  /* ============ FILTRES ============ */
+  .filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    background: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+  }
+  .filters input, .filters select {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .filters input { flex: 1; }
+
+  /* ============ TABLEAUX ============ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  th {
+    background: #f3f4f6;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f9fafb; }
+
+  /* ============ BADGES STATUT ============ */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-green { background: #d1fae5; color: #065f46; }
+  .badge-orange { background: #fed7aa; color: #92400e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+
+  /* ============ BOUTONS D'ACTION ============ */
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+  }
+
+  /* ============ FORMULAIRE ============ */
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #374151;
+  }
+  .form-group label .req { color: #dc2626; }
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  /* ============ DIALOGUE ============ */
+  .dialog {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ============ INFO BOX ============ */
+  .info-box {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .info-box .row {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;
+  }
+  .info-box .row strong { color: #1e3a8a; }
+  .warning-box {
+    background: #fef3c7;
+    border-left: 4px solid #d97706;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #92400e;
+  }
+
+  /* ============ KPI CARDS ============ */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .kpi-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    text-align: center;
+  }
+  .kpi-card .icon { font-size: 22px; margin-bottom: 6px; }
+  .kpi-card .label { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+  .kpi-card .value { font-size: 22px; font-weight: 700; color: #1e3a8a; }
+
+  /* ============ RADIO FILTRE ============ */
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .radio-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  /* ============ REÇU PDF ============ */
+  .receipt-wrapper {
+    background: #f9fafb;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  .receipt {
+    background: #fff;
+    width: 500px;
+    padding: 36px 32px;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  }
+  .receipt-header { text-align: center; margin-bottom: 24px; }
+  .receipt-header .school { font-size: 18px; font-weight: 700; color: #1e3a8a; }
+  .receipt-header .title { font-size: 14px; color: #4b5563; margin-top: 4px; }
+  .receipt-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #9ca3af;
+  }
+  .receipt-section {
+    margin: 16px 0;
+    padding: 12px 0;
+    border-bottom: 1px dashed #9ca3af;
+    font-size: 13px;
+  }
+  .receipt-section .row {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+  }
+  .receipt-section .row.total {
+    font-weight: 700;
+    color: #1e3a8a;
+    font-size: 15px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #d1d5db;
+  }
+  .receipt-footer {
+    margin-top: 30px;
+    font-size: 11px;
+    color: #6b7280;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ============ BARRE DE STATUT ============ */
+  .status-bar {
+    background: #1e293b;
+    color: #94a3b8;
+    font-size: 12px;
+    padding: 6px 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ============ PRINT ============ */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .mockup { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 20px; }
+    h2.screen-title { page-break-before: always; }
+    h2.screen-title:first-of-type { page-break-before: auto; }
+    .sidebar, .window-bar, .status-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .badge, .kpi-card, .info-box, .warning-box, .receipt { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">EduPaie — Maquettes de l’interface</h1>
+<p class="page-sub">Application desktop de gestion des paiements scolaires — PySide6 + SQLite</p>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 1 — FENÊTRE PRINCIPALE                                  -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 1 — Fenêtre principale (vue Tableau de bord)</h2>
+<div class="mockup">
+  <div class="window-bar">
+    <span>EduPaie — Gestion des paiements scolaires</span>
+    <span class="controls">— □ ✕</span>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="item active">🏠 Tableau de bord</div>
+      <div class="item">👥 Élèves</div>
+      <div class="item">💰 Paiements</div>
+      <div class="item">📄 Reçus</div>
+      <div class="item">⚙️ Paramètres</div>
+    </div>
+    <div class="content">
+      <div class="content-header">
+        <h3>Tableau de bord</h3>
+      </div>
+      <div class="kpi-grid" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="kpi-card"><div class="icon">👥</div><div class="label">Élèves</div><div class="value">15</div></div>
+        <div class="kpi-card"><div class="icon">♂️</div><div class="label">Garçons</div><div class="value">8</div></div>
+        <div class="kpi-card"><div class="icon">♀️</div><div class="label">Filles</div><div class="value">7</div></div>
+        <div class="kpi-card"><div class="icon">💰</div><div class="label">Encaissé</div><div class="value">875 000 F</div></div>
+        <div class="kpi-card"><div class="icon">📉</div><div class="label">Restant dû</div><div class="value">1 200 000 F</div></div>
+      </div>
+      <div class="radio-group">
+        <label><input type="radio" name="f1"> Tous</label>
+        <label><input type="radio" name="f1"> Soldés</label>
+        <label><input type="radio" name="f1" checked> Partiels</label>
+        <label><input type="radio" name="f1"> Non payés</label>
+      </div>
+      <table>
+        <thead><tr><th>Nom</th><th>Sexe</th><th>Classe</th><th>Total dû</th><th>Payé</th><th>Solde</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr><td>DIALLO Aïcha</td><td>F</td><td>5ème B</td><td>120 000</td><td>60 000</td><td>60 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+          <tr><td>KOFFI Yao</td><td>M</td><td>4ème A</td><td>180 000</td><td>100 000</td><td>80 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="status-bar"><span>Prêt</span><span>Base : edupaie.db | v1.0</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 2 — LISTE DES ÉLÈVES                                    -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 2 — Liste des élèves</h2>
+<div class="mockup">
+  <div class="window-bar"><span>EduPaie — Élèves</span><span class="controls">— □ ✕</span></div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="item">🏠 Tableau de bord</div>
+      <div class="item active">👥 Élèves</div>
+      <div class="item">💰 Paiements</div>
+      <div class="item">📄 Reçus</div>
+      <div class="item">⚙️ Paramètres</div>
+    </div>
+    <div class="content">
+      <div class="content-header">
+        <h3>Liste des élèves</h3>
+        <button class="btn btn-primary">+ Nouvel élève</button>
+      </div>
+      <div class="filters">
+        <input type="text" placeholder="🔍 Rechercher par nom ou prénom…">
+        <select><option>Toutes les classes</option><option>6ème A</option><option>5ème B</option></select>
+        <select><option>Tous les sexes</option><option>Masculin</option><option>Féminin</option></select>
+        <select>
+          <option>2024-2025</option>
+          <option selected>2025-2026</option>
+          <option>2026-2027</option>
+          <option>2027-2028</option>
+          <option>2028-2029</option>
+          <option>2029-2030</option>
+          <option>2030-2031</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Nom</th><th>Prénom</th><th>Sexe</th><th>Classe</th><th>Année</th><th>Total dû</th><th>Payé</th><th>Solde</th><th>Statut</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ADUKPO</td><td>Justin</td><td>M</td><td>6ème A</td><td>2025-2026</td><td>150 000</td><td>150 000</td><td>0</td><td><span class="badge badge-green">Soldé</span></td></tr>
+          <tr><td>DIALLO</td><td>Aïcha</td><td>F</td><td>5ème B</td><td>2025-2026</td><td>120 000</td><td>60 000</td><td>60 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+          <tr><td>KOFFI</td><td>Yao</td><td>M</td><td>4ème A</td><td>2025-2026</td><td>180 000</td><td>0</td><td>180 000</td><td><span class="badge badge-red">Non payé</span></td></tr>
+          <tr><td>TRAORÉ</td><td>Fatou</td><td>F</td><td>3ème B</td><td>2025-2026</td><td>200 000</td><td>200 000</td><td>0</td><td><span class="badge badge-green">Soldé</span></td></tr>
+          <tr><td>MENSAH</td><td>Kofi</td><td>M</td><td>6ème A</td><td>2025-2026</td><td>150 000</td><td>75 000</td><td>75 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+        </tbody>
+      </table>
+      <div class="actions">
+        <button class="btn btn-secondary">✏️ Modifier</button>
+        <button class="btn btn-danger">🗑️ Supprimer</button>
+        <button class="btn btn-primary">💰 Enregistrer un paiement</button>
+        <button class="btn btn-secondary">👁️ Voir la fiche</button>
+      </div>
+    </div>
+  </div>
+  <div class="status-bar"><span>5 élèves affichés</span><span>Base : edupaie.db</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 3 — FORMULAIRE ÉLÈVE                                    -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 3 — Formulaire d’ajout / modification d’élève</h2>
+<div class="mockup">
+  <div class="window-bar"><span>Nouvel élève</span><span class="controls">✕</span></div>
+  <div class="dialog" style="padding: 24px;">
+    <div class="form-group">
+      <label>Nom <span class="req">*</span></label>
+      <input type="text" value="ADUKPO">
+    </div>
+    <div class="form-group">
+      <label>Prénom <span class="req">*</span></label>
+      <input type="text" value="Justin">
+    </div>
+    <div class="form-group">
+      <label>Sexe <span class="req">*</span></label>
+      <div style="display: flex; gap: 20px; padding: 6px 0;">
+        <label style="font-weight: normal; display: flex; align-items: center; gap: 6px;">
+          <input type="radio" name="sexe" value="M" checked> Masculin
+        </label>
+        <label style="font-weight: normal; display: flex; align-items: center; gap: 6px;">
+          <input type="radio" name="sexe" value="F"> Féminin
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Classe <span class="req">*</span></label>
+      <select><option>6ème A</option><option>5ème B</option><option>4ème A</option></select>
+    </div>
+    <div class="form-group">
+      <label>Année scolaire <span class="req">*</span></label>
+      <select>
+        <option>2024-2025</option>
+        <option selected>2025-2026</option>
+        <option>2026-2027</option>
+        <option>2027-2028</option>
+        <option>2028-2029</option>
+        <option>2029-2030</option>
+        <option>2030-2031</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Total des frais de scolarité (FCFA) <span class="req">*</span></label>
+      <input type="number" value="150000">
+    </div>
+    <div class="form-footer">
+      <button class="btn btn-secondary">Annuler</button>
+      <button class="btn btn-success">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 4 — DIALOGUE DE PAIEMENT                                -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 4 — Dialogue d’enregistrement de paiement</h2>
+<div class="mockup">
+  <div class="window-bar"><span>Nouveau paiement — Justin ADUKPO</span><span class="controls">✕</span></div>
+  <div class="dialog" style="padding: 24px;">
+    <div class="info-box">
+      <div class="row"><span>Total dû :</span><strong>150 000 FCFA</strong></div>
+      <div class="row"><span>Total déjà payé :</span><strong>60 000 FCFA</strong></div>
+      <div class="row" style="border-top: 1px solid #bfdbfe; padding-top: 6px; margin-top: 6px;">
+        <span>▶ Solde restant :</span><strong>90 000 FCFA</strong>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Montant versé (FCFA) <span class="req">*</span></label>
+      <input type="number" placeholder="Ex. 30000">
+    </div>
+    <div class="form-group">
+      <label>Date du paiement <span class="req">*</span></label>
+      <input type="date" value="2026-10-01">
+    </div>
+    <div class="form-group">
+      <label>Mode de paiement <span class="req">*</span></label>
+      <select>
+        <option>Espèces</option>
+        <option>Chèque</option>
+        <option>Virement</option>
+        <option>Mobile Money</option>
+      </select>
+    </div>
+    <div class="warning-box">
+      ⚠️ Le montant ne doit pas dépasser le solde restant (90 000 FCFA).
+    </div>
+    <div class="form-footer">
+      <button class="btn btn-secondary">Annuler</button>
+      <button class="btn btn-success">Enregistrer + Générer le reçu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 5 — FICHE ÉLÈVE + HISTORIQUE                            -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 5 — Fiche élève + historique des paiements</h2>
+<div class="mockup">
+  <div class="window-bar"><span>Fiche élève — Justin ADUKPO</span><span class="controls">— □ ✕</span></div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="item">🏠 Tableau de bord</div>
+      <div class="item active">👥 Élèves</div>
+      <div class="item">💰 Paiements</div>
+      <div class="item">📄 Reçus</div>
+      <div class="item">⚙️ Paramètres</div>
+    </div>
+    <div class="content">
+      <div class="content-header">
+        <h3>Fiche élève — Justin ADUKPO</h3>
+        <button class="btn btn-primary">+ Nouveau paiement</button>
+      </div>
+      <div class="info-box">
+        <div class="row"><span>Classe :</span><strong>6ème A</strong></div>
+        <div class="row"><span>Sexe :</span><strong>Masculin</strong></div>
+        <div class="row"><span>Année scolaire :</span><strong>2025-2026</strong></div>
+        <div class="row"><span>Statut :</span><span class="badge badge-orange">Partiel</span></div>
+      </div>
+      <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="kpi-card"><div class="label">Total dû</div><div class="value">150 000 F</div></div>
+        <div class="kpi-card"><div class="label">Total payé</div><div class="value" style="color:#059669;">60 000 F</div></div>
+        <div class="kpi-card"><div class="label">Solde restant</div><div class="value" style="color:#dc2626;">90 000 F</div></div>
+      </div>
+      <h3 style="margin: 16px 0 10px; font-size: 15px; color:#111827;">Historique des paiements</h3>
+      <table>
+        <thead><tr><th>N° Reçu</th><th>Date</th><th>Montant</th><th>Mode</th><th>Solde après</th></tr></thead>
+        <tbody>
+          <tr><td>REC-2026-0001</td><td>15/09/2026</td><td>30 000</td><td>Espèces</td><td>120 000</td></tr>
+          <tr><td>REC-2026-0042</td><td>01/10/2026</td><td>30 000</td><td>Virement</td><td>90 000</td></tr>
+        </tbody>
+      </table>
+      <div class="actions">
+        <button class="btn btn-secondary">🖨️ Ré-imprimer le reçu sélectionné</button>
+      </div>
+    </div>
+  </div>
+  <div class="status-bar"><span>2 paiements enregistrés</span><span>Base : edupaie.db</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 6 — TABLEAU DE BORD COMPLET                             -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 6 — Tableau de bord (vue complète)</h2>
+<div class="mockup">
+  <div class="window-bar"><span>EduPaie — Tableau de bord</span><span class="controls">— □ ✕</span></div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="item active">🏠 Tableau de bord</div>
+      <div class="item">👥 Élèves</div>
+      <div class="item">💰 Paiements</div>
+      <div class="item">📄 Reçus</div>
+      <div class="item">⚙️ Paramètres</div>
+    </div>
+    <div class="content">
+      <div class="content-header"><h3>Tableau de bord</h3></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="icon">👥</div><div class="label">Nombre d’élèves</div><div class="value">15</div></div>
+        <div class="kpi-card"><div class="icon">💰</div><div class="label">Total encaissé</div><div class="value">875 000 F</div></div>
+        <div class="kpi-card"><div class="icon">📉</div><div class="label">Total restant dû</div><div class="value">1 200 000 F</div></div>
+        <div class="kpi-card"><div class="icon">⚠️</div><div class="label">Élèves non soldés</div><div class="value">9</div></div>
+      </div>
+      <div class="radio-group">
+        <label><input type="radio" name="f2"> Tous</label>
+        <label><input type="radio" name="f2"> Soldés</label>
+        <label><input type="radio" name="f2" checked> Partiels</label>
+        <label><input type="radio" name="f2"> Non payés</label>
+      </div>
+      <table>
+        <thead><tr><th>Nom</th><th>Sexe</th><th>Classe</th><th>Total dû</th><th>Payé</th><th>Solde</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr><td>DIALLO Aïcha</td><td>F</td><td>5ème B</td><td>120 000</td><td>60 000</td><td>60 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+          <tr><td>KOFFI Yao</td><td>M</td><td>4ème A</td><td>180 000</td><td>100 000</td><td>80 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+          <tr><td>MENSAH Kofi</td><td>M</td><td>6ème A</td><td>150 000</td><td>75 000</td><td>75 000</td><td><span class="badge badge-orange">Partiel</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="status-bar"><span>3 élèves partiels</span><span>Base : edupaie.db</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉCRAN 7 — REÇU PDF                                            -->
+<!-- ============================================================ -->
+<h2 class="screen-title">Écran 7 — Reçu imprimable (PDF)</h2>
+<div class="mockup">
+  <div class="receipt-wrapper">
+    <div class="receipt">
+      <div class="receipt-header">
+        <div class="school">🏫 ÉCOLE LES GÉNIES</div>
+        <div class="title">Reçu de paiement scolaire</div>
+      </div>
+      <div class="receipt-meta">
+        <span><strong>N° REC-2026-0042</strong></span>
+        <span>Date : 01/10/2026</span>
+      </div>
+      <div class="receipt-section">
+        <div class="row"><span>Élève :</span><span><strong>ADUKPO Justin</strong></span></div>
+        <div class="row"><span>Sexe :</span><span>Masculin</span></div>
+        <div class="row"><span>Classe :</span><span>6ème A</span></div>
+        <div class="row"><span>Année scolaire :</span><span>2025-2026</span></div>
+      </div>
+      <div class="receipt-section">
+        <div class="row"><span>Total des frais :</span><span>150 000 FCFA</span></div>
+        <div class="row"><span>Déjà payé :</span><span>30 000 FCFA</span></div>
+        <div class="row"><span>Montant reçu :</span><span><strong>30 000 FCFA</strong></span></div>
+        <div class="row"><span>Mode de paiement :</span><span>Virement</span></div>
+      </div>
+      <div class="receipt-section">
+        <div class="row total"><span>▶ Solde restant :</span><span>90 000 FCFA</span></div>
+      </div>
+      <div class="receipt-footer">
+        Signature et cachet de l’établissement<br>
+        Ce reçu est unique et non reproductible.
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
