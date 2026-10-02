@@ -31,3 +31,6 @@ Thumbs.db
 # Reçus générés (à exclure du dépôt)
 recus/
 *.pdf
+
+# Base générée localement (régénérable via data/init_db.py)
+db/*.db
