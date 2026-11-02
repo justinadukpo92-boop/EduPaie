@@ -26,9 +26,11 @@ class PaymentService:
             raise ValueError("La date doit être au format AAAA-MM-JJ.")
         if payment_method not in VALID_METHODS:
             raise ValueError("Mode de paiement invalide.")
+        
         paid = self.payments.total_paid(student_id)
         balance = student["total_fees"] - paid
-               if amount > balance:
+        
+        if amount > balance:
             raise ValueError(
                 f"Le montant dépasse le solde restant ({balance} FCFA)."
             )
