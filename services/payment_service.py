@@ -28,9 +28,9 @@ class PaymentService:
             raise ValueError("Mode de paiement invalide.")
         paid = self.payments.total_paid(student_id)
         balance = student["total_fees"] - paid
-        if amount > balance:
+               if amount > balance:
             raise ValueError(
-                f"Le montant dépasse le solde restant ({balance / 100:.2f})."
+                f"Le montant dépasse le solde restant ({balance} FCFA)."
             )
         return student, balance
 
