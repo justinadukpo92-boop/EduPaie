@@ -1,7 +1,9 @@
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QLabel, QTableWidget, QTableWidgetItem,
-    QHeaderView, QPushButton, QHBoxLayout, QAbstractItemView, QMessageBox
+    QHeaderView, QPushButton, QHBoxLayout, QAbstractItemView, QMessageBox,
+    QFileDialog
 )
+from PySide6.QtCore import Qt
 
 
 METHOD_LABELS = {
@@ -17,7 +19,7 @@ class StudentDetail(QDialog):
         super().__init__(parent)
         self.student_id = student_id
         self.setWindowTitle("Fiche élève")
-        self.resize(750, 520)
+        self.resize(800, 550)
 
         from services.student_service import StudentService
         from services.payment_service import PaymentService
@@ -45,9 +47,15 @@ class StudentDetail(QDialog):
         buttons = QHBoxLayout()
         self.btn_pay = QPushButton("Enregistrer un paiement")
         self.btn_pay.clicked.connect(self.register_payment)
+        
+        self.btn_pdf = QPushButton("Exporter le reçu (PDF)")
+        self.btn_pdf.clicked.connect(self.export_receipt)
+        
         btn_close = QPushButton("Fermer")
         btn_close.clicked.connect(self.accept)
+        
         buttons.addWidget(self.btn_pay)
+        buttons.addWidget(self.btn_pdf)
         buttons.addStretch()
         buttons.addWidget(btn_close)
         self.layout_.addLayout(buttons)
@@ -81,8 +89,13 @@ class StudentDetail(QDialog):
             self.table.setItem(row, 0, QTableWidgetItem(p["payment_date"]))
             self.table.setItem(row, 1, QTableWidgetItem(f"{p['amount']:,} FCFA".replace(",", " ")))
             self.table.setItem(row, 2, QTableWidgetItem(METHOD_LABELS.get(p["payment_method"], p["payment_method"])))
+            
             r = receipts_by_payment.get(p["id"])
-            self.table.setItem(row, 3, QTableWidgetItem(r["receipt_number"] if r else "—"))
+            item_receipt = QTableWidgetItem(r["receipt_number"] if r else "—")
+            if r:
+                item_receipt.setData(Qt.UserRole, r["id"])
+            self.table.setItem(row, 3, item_receipt)
+            
             self.table.setItem(row, 4, QTableWidgetItem(f"{r['balance_after']:,} FCFA".replace(",", " ") if r else "—"))
 
         # Désactiver le bouton si l'élève est soldé
@@ -100,3 +113,35 @@ class StudentDetail(QDialog):
                 self, "Paiement enregistré",
                 f"Reçu n° {data['receipt_number']}\nSolde restant : {data['balance_after']} FCFA"
             )
+
+    def export_receipt(self):
+        row = self.table.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner un paiement dans l'historique.")
+            return
+        
+        item = self.table.item(row, 3)
+        receipt_id = item.data(Qt.UserRole) if item else None
+        
+        if not receipt_id:
+            QMessageBox.warning(self, "Erreur", "Aucun reçu associé à ce paiement.")
+            return
+        
+        receipt = self.receipt_service.get_by_id(receipt_id)
+        if not receipt:
+            QMessageBox.warning(self, "Erreur", "Reçu introuvable.")
+            return
+            
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Enregistrer le reçu PDF", 
+            f"recu_{receipt['receipt_number']}.pdf", 
+            "Fichiers PDF (*.pdf)"
+        )
+        
+        if file_path:
+            try:
+                from utils.pdf_generator import generate_receipt_pdf
+                generate_receipt_pdf(receipt, file_path)
+                QMessageBox.information(self, "Succès", f"Reçu exporté avec succès :\n{file_path}")
+            except Exception as e:
+                QMessageBox.critical(self, "Erreur", f"Erreur lors de l'export : {str(e)}")
