@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QTableWidget,
-    QTableWidgetItem, QHeaderView, QPushButton, QAbstractItemView, QWidget
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTableWidget,
+    QTableWidgetItem, QHeaderView, QPushButton, QAbstractItemView
 )
 from PySide6.QtCore import Qt
 
@@ -8,11 +8,9 @@ from services.dashboard_service import DashboardService
 from services.student_service import StudentService
 
 
-class Dashboard(QDialog):
+class Dashboard(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Tableau de bord")
-        self.resize(900, 600)
 
         self.dashboard_service = DashboardService()
         self.student_service = StudentService()
@@ -47,26 +45,25 @@ class Dashboard(QDialog):
         layout.addWidget(self.table)
 
         buttons = QHBoxLayout()
-        btn_close = QPushButton("Fermer")
-        btn_close.clicked.connect(self.accept)
+        btn_refresh = QPushButton("Rafraîchir les données")
+        btn_refresh.clicked.connect(self.load_data)
         buttons.addStretch()
-        buttons.addWidget(btn_close)
+        buttons.addWidget(btn_refresh)
         layout.addLayout(buttons)
 
         self.load_data()
 
     def _create_card(self, title, value):
         widget = QWidget()
-        # Style identique aux boutons bleus de l'accueil
         widget.setStyleSheet("""
             QWidget {
-                background-color: #00509e; /* Le bleu de tes boutons */
+                background-color: #00509e;
                 border: 1px solid #007bff;
                 border-radius: 6px;
                 padding: 10px;
             }
             QLabel {
-                color: #ffffff; /* Texte blanc */
+                color: #ffffff;
                 border: none;
                 background-color: transparent;
             }
@@ -74,7 +71,6 @@ class Dashboard(QDialog):
         card_layout = QVBoxLayout(widget)
         
         lbl_title = QLabel(title)
-        # Texte légèrement plus clair pour différencier le titre de la valeur
         lbl_title.setStyleSheet("font-size: 13px; color: #e0e0e0; border: none; background-color: transparent;")
         
         lbl_value = QLabel(value)
@@ -89,13 +85,11 @@ class Dashboard(QDialog):
     def load_data(self):
         stats = self.dashboard_service.get_stats()
 
-        # Mise à jour des cartes
         self.card_students.value_label.setText(str(stats["total_students"]))
         self.card_collected.value_label.setText(f"{stats['total_collected']:,} FCFA".replace(",", " "))
         self.card_remaining.value_label.setText(f"{stats['total_remaining']:,} FCFA".replace(",", " "))
         self.card_unpaid.value_label.setText(str(stats["unpaid_count"]))
 
-        # Mise à jour du tableau
         self.table.setRowCount(0)
         students = self.student_service.list()
         

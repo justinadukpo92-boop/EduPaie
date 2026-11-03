@@ -5,6 +5,12 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
+from services.student_service import StudentService
+from services.payment_service import PaymentService
+from services.receipt_service import ReceiptService
+from ui.payment_dialog import PaymentDialog
+from utils.pdf_generator import generate_receipt_pdf
+
 
 METHOD_LABELS = {
     "especes": "Espèces",
@@ -20,10 +26,6 @@ class StudentDetail(QDialog):
         self.student_id = student_id
         self.setWindowTitle("Fiche élève")
         self.resize(800, 550)
-
-        from services.student_service import StudentService
-        from services.payment_service import PaymentService
-        from services.receipt_service import ReceiptService
 
         self.student_service = StudentService()
         self.payment_service = PaymentService()
@@ -68,6 +70,7 @@ class StudentDetail(QDialog):
             QMessageBox.warning(self, "Erreur", "Élève introuvable.")
             self.reject()
             return
+        
         info = self.student_service.get_balance(self.student_id)
 
         self.info_label.setText(
@@ -83,6 +86,7 @@ class StudentDetail(QDialog):
         receipts_by_payment = {
             r["payment_id"]: r for r in self.receipt_service.list_for_student(self.student_id)
         }
+        
         for p in self.payment_service.history(self.student_id):
             row = self.table.rowCount()
             self.table.insertRow(row)
@@ -102,9 +106,9 @@ class StudentDetail(QDialog):
         self.btn_pay.setEnabled(info["balance"] > 0)
 
     def register_payment(self):
-        from ui.payment_dialog import PaymentDialog
         student = self.student_service.get_by_id(self.student_id)
         info = self.student_service.get_balance(self.student_id)
+        
         dialog = PaymentDialog(self, student=student, balance=info["balance"])
         if dialog.exec() and dialog.result_data:
             self.load_data()
@@ -140,8 +144,8 @@ class StudentDetail(QDialog):
         
         if file_path:
             try:
-                from utils.pdf_generator import generate_receipt_pdf
-                generate_receipt_pdf(receipt, file_path)
+                # Appel de la fonction PDF avec le nom de l'école
+                generate_receipt_pdf(receipt, file_path, school_name="COMPLEXE SCOLAIRE EDUPAIE")
                 QMessageBox.information(self, "Succès", f"Reçu exporté avec succès :\n{file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Erreur", f"Erreur lors de l'export : {str(e)}")

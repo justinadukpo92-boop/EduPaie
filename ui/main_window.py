@@ -1,9 +1,10 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QComboBox,
     QPushButton, QTableWidget, QTableWidgetItem, QMessageBox, QHeaderView,
-    QAbstractItemView
+    QAbstractItemView, QTabWidget
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 
 from services.student_service import StudentService
 from ui.student_form import StudentForm
@@ -15,12 +16,18 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("EduPaie — Gestion des frais scolaires")
-        self.resize(1000, 600)
+        self.resize(1000, 650)
+        self.setWindowIcon(QIcon("assets/icon.ico"))
 
         self.student_service = StudentService()
 
-        central = QWidget()
-        layout = QVBoxLayout(central)
+        # Création du système d'onglets
+        self.tabs = QTabWidget()
+        self.setCentralWidget(self.tabs)
+
+        # ================= Onglet 1 : Élèves =================
+        self.tab_students = QWidget()
+        layout_students = QVBoxLayout(self.tab_students)
 
         # Barre d'outils
         toolbar = QHBoxLayout()
@@ -44,20 +51,16 @@ class MainWindow(QMainWindow):
         btn_detail = QPushButton("Fiche élève")
         btn_detail.clicked.connect(self.open_detail)
 
-        btn_dashboard = QPushButton("Tableau de bord")
-        btn_dashboard.clicked.connect(self.open_dashboard)
-
         toolbar.addWidget(self.search_input, 2)
         toolbar.addWidget(self.class_filter, 1)
         toolbar.addWidget(btn_add)
         toolbar.addWidget(btn_edit)
         toolbar.addWidget(btn_delete)
         toolbar.addWidget(btn_detail)
-        toolbar.addWidget(btn_dashboard)
 
-        layout.addLayout(toolbar)
+        layout_students.addLayout(toolbar)
 
-        # Tableau
+        # Tableau des élèves
         self.table = QTableWidget(0, 6)
         self.table.setHorizontalHeaderLabels(
             ["Nom", "Prénom", "Classe", "Année", "Total dû", "Statut"]
@@ -66,12 +69,24 @@ class MainWindow(QMainWindow):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.doubleClicked.connect(self.open_detail)
-        layout.addWidget(self.table)
+        layout_students.addWidget(self.table)
 
-        self.setCentralWidget(central)
+        # ================= Onglet 2 : Tableau de bord =================
+        self.tab_dashboard = Dashboard()
+        
+        # Ajout des onglets
+        self.tabs.addTab(self.tab_students, "Gestion des élèves")
+        self.tabs.addTab(self.tab_dashboard, "Tableau de bord")
+        
+        # Mettre à jour le dashboard quand on change d'onglet
+        self.tabs.currentChanged.connect(self.on_tab_changed)
 
         self.load_classes()
         self.refresh()
+
+    def on_tab_changed(self, index):
+        if self.tabs.widget(index) == self.tab_dashboard:
+            self.tab_dashboard.load_data()
 
     def load_classes(self):
         current = self.class_filter.currentData()
@@ -165,10 +180,5 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Sélection", "Sélectionnez un élève.")
             return
         dialog = StudentDetail(self, student_id=sid)
-        dialog.exec()
-        self.refresh()
-
-    def open_dashboard(self):
-        dialog = Dashboard(self)
         dialog.exec()
         self.refresh()
