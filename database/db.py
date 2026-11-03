@@ -23,4 +23,6 @@ def init_db() -> None:
         schema_sql = f.read()
     with get_connection() as conn:
         conn.executescript(schema_sql)
+        # Insertion du nom d'école par défaut s'il n'existe pas
+        conn.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('school_name', 'COMPLEXE SCOLAIRE EDUPAIE')")
         conn.commit()

@@ -8,6 +8,7 @@ from PySide6.QtCore import Qt
 from services.student_service import StudentService
 from services.payment_service import PaymentService
 from services.receipt_service import ReceiptService
+from services.settings_service import SettingsService
 from ui.payment_dialog import PaymentDialog
 from utils.pdf_generator import generate_receipt_pdf
 
@@ -30,6 +31,7 @@ class StudentDetail(QDialog):
         self.student_service = StudentService()
         self.payment_service = PaymentService()
         self.receipt_service = ReceiptService()
+        self.settings_service = SettingsService() # <-- Ajout du service Paramètres
 
         self.layout_ = QVBoxLayout(self)
         self.info_label = QLabel()
@@ -102,7 +104,6 @@ class StudentDetail(QDialog):
             
             self.table.setItem(row, 4, QTableWidgetItem(f"{r['balance_after']:,} FCFA".replace(",", " ") if r else "—"))
 
-        # Désactiver le bouton si l'élève est soldé
         self.btn_pay.setEnabled(info["balance"] > 0)
 
     def register_payment(self):
@@ -144,8 +145,9 @@ class StudentDetail(QDialog):
         
         if file_path:
             try:
-                # Appel de la fonction PDF avec le nom de l'école
-                generate_receipt_pdf(receipt, file_path, school_name="COMPLEXE SCOLAIRE EDUPAIE")
+                # Utilisation du nom de l'école dynamique
+                nom_ecole = self.settings_service.get_school_name()
+                generate_receipt_pdf(receipt, file_path, school_name=nom_ecole)
                 QMessageBox.information(self, "Succès", f"Reçu exporté avec succès :\n{file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Erreur", f"Erreur lors de l'export : {str(e)}")
