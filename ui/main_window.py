@@ -18,7 +18,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("EduPaie — Gestion des frais scolaires")
         self.resize(1000, 650)
-        self.setWindowIcon(QIcon("assets/icon.ico"))
+        from utils.paths import get_resource_path
+        self.setWindowIcon(QIcon(get_resource_path("assets/icon.ico")))
 
         self.student_service = StudentService()
 
