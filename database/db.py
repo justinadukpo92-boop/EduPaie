@@ -1,12 +1,11 @@
-import os
 import sqlite3
 from pathlib import Path
+from utils.paths import get_resource_path, get_app_dir
 
 
 def get_db_path() -> Path:
-    """Retourne le chemin de la base .db, à côté de l'exécutable ou du projet."""
-    base_dir = Path(__file__).resolve().parent.parent
-    return base_dir / "school.db"
+    # La base de données sera TOUJOURS à côté de l'exécutable (pour qu'elle sauvegarde les données)
+    return Path(get_app_dir()) / "school.db"
 
 
 def get_connection() -> sqlite3.Connection:
@@ -17,12 +16,11 @@ def get_connection() -> sqlite3.Connection:
 
 
 def init_db() -> None:
-    """Crée les tables si elles n'existent pas, à partir de schema.sql."""
-    schema_file = Path(__file__).resolve().parent / "schema.sql"
+    # Le schema.sql est embarqué DANS l'exécutable (ressource)
+    schema_file = get_resource_path("database/schema.sql")
     with open(schema_file, "r", encoding="utf-8") as f:
         schema_sql = f.read()
     with get_connection() as conn:
         conn.executescript(schema_sql)
-        # Insertion du nom d'école par défaut s'il n'existe pas
         conn.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('school_name', 'COMPLEXE SCOLAIRE EDUPAIE')")
         conn.commit()
