@@ -10,6 +10,7 @@ from services.student_service import StudentService
 from ui.student_form import StudentForm
 from ui.student_detail import StudentDetail
 from ui.dashboard import Dashboard
+from ui.settings_dialog import SettingsDialog
 
 
 class MainWindow(QMainWindow):
@@ -51,12 +52,16 @@ class MainWindow(QMainWindow):
         btn_detail = QPushButton("Fiche élève")
         btn_detail.clicked.connect(self.open_detail)
 
+        btn_settings = QPushButton("Paramètres")
+        btn_settings.clicked.connect(self.open_settings)
+
         toolbar.addWidget(self.search_input, 2)
         toolbar.addWidget(self.class_filter, 1)
         toolbar.addWidget(btn_add)
         toolbar.addWidget(btn_edit)
         toolbar.addWidget(btn_delete)
         toolbar.addWidget(btn_detail)
+        toolbar.addWidget(btn_settings)
 
         layout_students.addLayout(toolbar)
 
@@ -182,3 +187,7 @@ class MainWindow(QMainWindow):
         dialog = StudentDetail(self, student_id=sid)
         dialog.exec()
         self.refresh()
+
+    def open_settings(self):
+        dialog = SettingsDialog(self)
+        dialog.exec()
