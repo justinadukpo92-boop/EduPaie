@@ -8,6 +8,7 @@ from PySide6.QtCore import Qt
 from services.student_service import StudentService
 from ui.student_form import StudentForm
 from ui.student_detail import StudentDetail
+from ui.dashboard import Dashboard
 
 
 class MainWindow(QMainWindow):
@@ -43,12 +44,16 @@ class MainWindow(QMainWindow):
         btn_detail = QPushButton("Fiche élève")
         btn_detail.clicked.connect(self.open_detail)
 
+        btn_dashboard = QPushButton("Tableau de bord")
+        btn_dashboard.clicked.connect(self.open_dashboard)
+
         toolbar.addWidget(self.search_input, 2)
         toolbar.addWidget(self.class_filter, 1)
         toolbar.addWidget(btn_add)
         toolbar.addWidget(btn_edit)
         toolbar.addWidget(btn_delete)
         toolbar.addWidget(btn_detail)
+        toolbar.addWidget(btn_dashboard)
 
         layout.addLayout(toolbar)
 
@@ -160,5 +165,10 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Sélection", "Sélectionnez un élève.")
             return
         dialog = StudentDetail(self, student_id=sid)
+        dialog.exec()
+        self.refresh()
+
+    def open_dashboard(self):
+        dialog = Dashboard(self)
         dialog.exec()
         self.refresh()
