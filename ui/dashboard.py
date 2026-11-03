@@ -57,23 +57,28 @@ class Dashboard(QDialog):
 
     def _create_card(self, title, value):
         widget = QWidget()
+        # Style identique aux boutons bleus de l'accueil
         widget.setStyleSheet("""
             QWidget {
-                background-color: #2b2b2b;
-                border-radius: 8px;
+                background-color: #00509e; /* Le bleu de tes boutons */
+                border: 1px solid #007bff;
+                border-radius: 6px;
                 padding: 10px;
             }
             QLabel {
-                color: #ffffff;
+                color: #ffffff; /* Texte blanc */
+                border: none;
+                background-color: transparent;
             }
         """)
         card_layout = QVBoxLayout(widget)
         
         lbl_title = QLabel(title)
-        lbl_title.setStyleSheet("font-size: 12px; color: #aaaaaa;")
+        # Texte légèrement plus clair pour différencier le titre de la valeur
+        lbl_title.setStyleSheet("font-size: 13px; color: #e0e0e0; border: none; background-color: transparent;")
         
         lbl_value = QLabel(value)
-        lbl_value.setStyleSheet("font-size: 20px; font-weight: bold;")
+        lbl_value.setStyleSheet("font-size: 22px; font-weight: bold; color: #ffffff; border: none; background-color: transparent;")
         lbl_value.setAlignment(Qt.AlignCenter)
         widget.value_label = lbl_value
 
